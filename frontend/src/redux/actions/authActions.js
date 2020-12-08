@@ -1,32 +1,43 @@
 import axios from "axios";
 import jwt_decode from "jwt-decode";
+var serverUrl = 'http://localhost:5000';
 const registerUserAction = (userData, history) => dispatch => {
+  dispatch({ type: "SET_ERROR", payload: '' });
   axios
-    .post("/users/register", userData)
+    .post(serverUrl+"/users/register", userData)
     .then(res => {
-      history.push("/login");
+      var data = res.data
+    
+      if(data.success){
+        localStorage.setItem('jwtToken',data.token);
+        dispatch(setCurrentUser(data.user));
+      }else{
+        dispatch({ type: "SET_ERROR", payload: data.msg });
+      }
     })
     .catch(err => {
-      dispatch({ type: "GET_ERRORS", payload: err.response.data });
+      // dispatch({ type: "GET_ERRORS", payload: err.response.data });
+      console.log('error: ',err.message)
+      dispatch({ type: "SET_ERROR", payload: err.message });
     });
 };
 
 const loginUserAction = userData => dispatch => {
   axios
-    .post("/users/login", userData)
+    .post(serverUrl+"/users/login", userData)
     .then(res => {
-      const { token } = res.data;
-      //set token to localstorage
-      localStorage.setItem("jwtToken", token);
-      //set auth
-      setAuthToken(token);
-      // decode the token for user data
-      const decoded = jwt_decode(token);
-
-      dispatch(setCurrentUser(decoded));
+      var data = res.data
+    
+      if(data.success){
+        localStorage.setItem('jwtToken',data.token);
+        dispatch(setCurrentUser(data.user));
+      }else{
+        dispatch({ type: "SET_ERROR", payload: data.msg });
+      }
     })
     .catch(err => {
-      dispatch({ type: "GET_ERRORS", payload: err.response.data });
+      console.log('error: ',err.message)
+      dispatch({ type: "SET_ERROR", payload: err.message });
     });
 };
 

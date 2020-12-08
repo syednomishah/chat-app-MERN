@@ -1,4 +1,6 @@
 import React,{Component} from 'react';
+import jwt_decode from "jwt-decode";
+import { setCurrentUser, logoutUserAction } from "./redux/actions/authActions";
 
 import {
   BrowserRouter as Router,
@@ -6,13 +8,31 @@ import {
   Switch,
   // Redirect
 } from 'react-router-dom';
+import {connect} from 'react-redux'
 import Login from './components/user/login';
 import Register from './components/user/register';
 import ChatView from './components/chat/chatView';
+import store from "./redux/store";
+
+
+if (localStorage.jwtToken) {
+ 
+  if(localStorage.jwtToken){
+    const decoded = jwt_decode(localStorage.jwtToken);
+    if(decoded){
+      store.dispatch(setCurrentUser(decoded));
+      // window.location.href="/";
+    }
+  }
+  
+
+  
+  
+}
 class App extends Component {
   
   render(){
-    var loginUser = true;
+    var loginUser = this.props.user && this.props.user.id?true:false;
     return (
       <div className="app">
 
@@ -44,7 +64,7 @@ class App extends Component {
 }
 
 const AuthRoute = ({component: Component, authUser, ...rest }) => {
-
+  // console.log(authUser)
   return (
     <Route
       {...rest}
@@ -54,7 +74,7 @@ const AuthRoute = ({component: Component, authUser, ...rest }) => {
 				  return <Component {...props} />
 			  }else{
           // return login component here
-				  window.location.href='/';
+				  window.location.href='/login';
 			  }
 			 }
       }
@@ -62,4 +82,12 @@ const AuthRoute = ({component: Component, authUser, ...rest }) => {
   );
 }
 
-export default App;
+const mapStateToProps = ({auth}) => {
+  return {
+    user: auth.user
+  };
+};
+export default connect(
+  mapStateToProps,
+  {  }
+)(App);

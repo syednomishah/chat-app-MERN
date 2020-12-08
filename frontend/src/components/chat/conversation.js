@@ -53,11 +53,11 @@ class Conversation extends Component {
                         this.props.parentRef.current.scrollTo(0,this.props.parentRef.current.scrollHeight);
                     }}>Clickme</button> */}
                     {
-                        chat.map(item=>{
+                        chat.map((item,index)=>{
                             var right = item.userId==currentUser.id?true:false;
                             return (
 
-                                <div className={` mt-4 relative flex items-baseline ${right?'justify-end':'justify-start'} `}>
+                                <div key={index} className={` mt-4 relative flex items-baseline ${right?'justify-end':'justify-start'} `}>
 
                                         {right?null:<a href="#" className="px-1 rounded-l bg-green-300 py-2 text-gray-600 font-bold">{item.username}</a>}
                                         <span className={`${right?'rounded-l':'rounded-r'} hover:shadow-md text-md cursor-pointer transition ease-in duration-150 py-2 px-2 bg-gray-100`}>
