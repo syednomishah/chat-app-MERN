@@ -37,7 +37,7 @@ class Register extends Component {
     handleFormSubmit = e=>{
         e.preventDefault();
         var {username,password} = this.state;
-        this.setState({loading: true})
+        this.setState({loading: true,error: ''})
         this.props.registerUserAction({username,password})
     }
 
@@ -74,7 +74,7 @@ class Register extends Component {
                         
                         {
                             this.state.loading?(
-                                <button className="font-bold  mr-1 bg-green-300 text-white text-md py-1 px-3 hover:shadow-xl" disabled>Loading</button>
+                                <button className="font-bold mb-4  mr-1 bg-green-300 text-white text-md py-1 px-3 hover:shadow-xl" disabled>Loading</button>
                             ):(
                                 <button className="font-bold mb-4 mr-1 bg-green-300 text-white text-md py-1 px-3 hover:shadow-xl" type="submit">Signup</button>
                             )

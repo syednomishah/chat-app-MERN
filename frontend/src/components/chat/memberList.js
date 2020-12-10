@@ -19,32 +19,18 @@ class MemberList extends Component {
             <section className="h-full flex flex-col text-gray-700">
                
                  <ul className="p-2 overflow-y-scroll h-3/4">
+                    {
+                        this.props.members.map((member,index)=>{
+
+                            return (
+                                <li key={index} onClick={()=>this.props.handleMemberChange(member)} className="px-4 hover:shadow-lg hover:text-md customListBorder text-sm py-2 mt-2 transition ease-in duration-150">
+                                    <a href="#" >{member.username}</a>
+                                </li>
+                            );
+
+                        })
+                    }
                     
-                    <li className="px-4 hover:shadow-lg hover:text-md customListBorder text-sm py-2 mt-2 transition ease-in duration-150">
-                        <a href="#" >member 1</a>
-                    </li>
-                    <li className="px-4 hover:shadow-lg hover:text-md customListBorder text-sm py-2 mt-2 transition ease-in duration-150">
-                        <a href="#" >member 2</a>
-                    </li>
-                      
-                    <li className="px-4 hover:shadow-lg hover:text-md customListBorder text-sm py-2 mt-2 transition ease-in duration-150">
-                        <a href="#" >member 3</a>
-                    </li>   
-                    <li className="px-4 hover:shadow-lg hover:text-md customListBorder text-sm py-2 mt-2 transition ease-in duration-150">
-                        <a href="#" >member 3</a>
-                    </li>   
-                    <li className="px-4 hover:shadow-lg hover:text-md customListBorder text-sm py-2 mt-2 transition ease-in duration-150">
-                        <a href="#" >member 3</a>
-                    </li>   
-                    <li className="px-4 hover:shadow-lg hover:text-md customListBorder text-sm py-2 mt-2 transition ease-in duration-150">
-                        <a href="#" >member 3</a>
-                    </li>   
-                    <li className="px-4 hover:shadow-lg hover:text-md customListBorder text-sm py-2 mt-2 transition ease-in duration-150">
-                        <a href="#" >member 3</a>
-                    </li>   
-                    <li className="px-4 hover:shadow-lg hover:text-md customListBorder text-sm py-2 mt-2 transition ease-in duration-150">
-                        <a href="#" >member 3</a>
-                    </li>   
                        
                      
                 </ul>

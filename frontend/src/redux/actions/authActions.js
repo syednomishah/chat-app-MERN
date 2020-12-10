@@ -43,7 +43,7 @@ const loginUserAction = userData => dispatch => {
 
 const logoutUserAction = history => dispatch => {
   localStorage.removeItem("jwtToken");
-  dispatch(setCurrentUser(false));
+  dispatch(setCurrentUser({}));
 };
 
 function setCurrentUser(decoded) {

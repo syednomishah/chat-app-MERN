@@ -6,12 +6,14 @@ import {
   BrowserRouter as Router,
   Route,
   Switch,
+  withRouter
   // Redirect
 } from 'react-router-dom';
 import {connect} from 'react-redux'
 import Login from './components/user/login';
 import Register from './components/user/register';
 import ChatView from './components/chat/chatView';
+import NewGroup from './components/chat/createGroup';
 import store from "./redux/store";
 
 
@@ -33,16 +35,24 @@ class App extends Component {
   
   render(){
     var loginUser = this.props.user && this.props.user.id?true:false;
+    // console.log(this.props);
     return (
       <div className="app">
 
-        <Router>
           <Switch>
             <AuthRoute
               path="/"
               exact
+              history={this.props.history}
               authUser={loginUser}
               component={ChatView}
+            />
+            <AuthRoute
+              path="/group"
+              exact
+              history={this.props.history}
+              authUser={loginUser}
+              component={NewGroup}
             />
             <Route
               path="/login"
@@ -56,14 +66,13 @@ class App extends Component {
             />
         
           </Switch>
-        </Router>
       </div>
     );
   }
   
 }
 
-const AuthRoute = ({component: Component, authUser, ...rest }) => {
+const AuthRoute = ({component: Component,history, authUser, ...rest }) => {
   // console.log(authUser)
   return (
     <Route
@@ -74,7 +83,7 @@ const AuthRoute = ({component: Component, authUser, ...rest }) => {
 				  return <Component {...props} />
 			  }else{
           // return login component here
-				  window.location.href='/login';
+				  history.push('/login');
 			  }
 			 }
       }
@@ -90,4 +99,4 @@ const mapStateToProps = ({auth}) => {
 export default connect(
   mapStateToProps,
   {  }
-)(App);
+)(withRouter(App));

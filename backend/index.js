@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors')
 const passport = require("passport");
 const fs = require('fs');
+const initSocket = require('./socketioEvents/index');
 
 const app = express();
 const port=5000;
@@ -35,8 +36,7 @@ var io = require('socket.io').listen(server);
 
 // console.log(io)
 io.on('connection', function(socket) {
-    console.log('client connect');
-    socket.on('test', data=> {
-        console.log('in test',data);
-    });
+
+    initSocket({io,socket})
+    
 });
