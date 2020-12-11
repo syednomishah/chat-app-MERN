@@ -16,6 +16,7 @@ class GroupList extends Component {
     }
         
     render() {
+        // console.log(this.props.update);
         return (
             <section className="h-full flex flex-col text-gray-700">
                

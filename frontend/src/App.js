@@ -14,7 +14,9 @@ import Login from './components/user/login';
 import Register from './components/user/register';
 import ChatView from './components/chat/chatView';
 import NewGroup from './components/chat/createGroup';
+// import Brodcast from './components/chat/brodcast';
 import store from "./redux/store";
+import {login } from './api';
 
 
 if (localStorage.jwtToken) {
@@ -54,6 +56,13 @@ class App extends Component {
               authUser={loginUser}
               component={NewGroup}
             />
+            {/* <AuthRoute
+              path="/brodcast"
+              exact
+              history={this.props.history}
+              authUser={loginUser}
+              component={Brodcast}
+            /> */}
             <Route
               path="/login"
               exact

@@ -5,7 +5,7 @@ const cors = require('cors')
 const passport = require("passport");
 const fs = require('fs');
 const initSocket = require('./socketioEvents/index');
-
+const path = require('path');
 const app = express();
 const port=5000;
 app.use(bodyParser.json({limit: '50mb'}));
@@ -24,6 +24,11 @@ var routePath = "./routes/";
 fs.readdirSync(routePath).forEach(function(file) {
 	var route = routePath + file;
 	app.use(require(route).router);
+});
+
+app.get('*', (req,res) =>{
+    console.log('here)')
+    res.sendFile(path.join(__dirname,'index.html'));
 });
 
 var server = app.listen(port,()=>{

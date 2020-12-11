@@ -3,7 +3,8 @@ import { connect } from "react-redux";
 import MemberList from './memberList';
 import Conversation from './conversation';
 import GroupList from './groupList';
-import {test,login,members, chatHistory, newMessage, groups, newGroupMessage, groupChatHistory} from '../../api';
+import Brodcast from './brodcast';
+import {test,login,members, chatHistory,brodcastMessage, newMessage, groups, newGroupMessage, groupChatHistory} from '../../api';
 import TopNav from '../chat/topNav';
 
 class ChatView extends Component {
@@ -17,7 +18,9 @@ class ChatView extends Component {
             currentMember: null,
             currentGroup: null,
             chatHistory: [],
-            groupHistory:[]
+            groupHistory:[],
+            update: true,
+            modalLoading: false
         }
         this.conRef = React.createRef();
     }
@@ -28,6 +31,11 @@ class ChatView extends Component {
         });
     }
 
+    componentWillReceiveProps(next){
+        // members(this.processMembers);
+        // groups(this.processGroups);
+        
+    }
     componentDidMount(){ // mounted
         // console.log(this.props);
         login(this.processLogin);
@@ -35,11 +43,26 @@ class ChatView extends Component {
         groups(this.processGroups);
         groupChatHistory(this.processGroupChatHistory);
         chatHistory(this.processChatHistory);
+        brodcastMessage(this.processBrodcastMessage);
         newGroupMessage(this.processNewGroupMessage);
         newMessage(this.processNewMessage);
         // test(this.processTest);
         
         // var user = this.props.auth.user;
+    }
+
+    processBrodcastMessage = data=>{
+        this.setState({modalLoading: false})
+        if(data.success){
+            var element = document.getElementById("groupModel");
+            element.classList.add("hidden");
+        }
+ 
+        
+    }
+    handleGroupMessage = data=>{
+        this.setState({modalLoading: true});
+        brodcastMessage(data);
     }
 
     // componentDidUpdate(){ //update
@@ -58,10 +81,11 @@ class ChatView extends Component {
     }
 
     processMembers = members=>{
-        this.setState({members});
+        
+        this.setState({members,update: !this.state.update});
     }
     processGroups = groups=>{
-        this.setState({groups})
+        this.setState({groups,update: !this.state.update})
     }
     processChatHistory = chatHistory=>{
         // console.log(chatHistory);
@@ -94,10 +118,10 @@ class ChatView extends Component {
     }
     processNewMessage=message=>{
         var chatHistory = this.state.chatHistory
-        if(message.receiverId==this.props.auth.user.id){
+        // if(message.receiverId==this.props.auth.user.id){
             chatHistory.push(message);
             this.setState({chatHistory,update: !this.state.update});
-        }
+        // }
     }
 
     handleMessage = message=>{
@@ -143,8 +167,8 @@ class ChatView extends Component {
                         </div>
                         <div className="h-full">
                             {this.state.activeTab==0?(
-                                <MemberList handleMemberChange={this.handleMemberChange} members={this.state.members} />
-                            ):(<GroupList handleGroupChange={this.handleGroupChange} groups={this.state.groups} />)}
+                                <MemberList update={this.state.update} handleMemberChange={this.handleMemberChange} members={this.state.members} />
+                            ):(<GroupList update={this.state.update} handleGroupChange={this.handleGroupChange} groups={this.state.groups} />)}
                         </div>
                         
                     </div>
@@ -160,7 +184,7 @@ class ChatView extends Component {
                         />
                     </div>
                 </div>
-                
+                <Brodcast loading={this.state.modalLoading} handleMessage={this.handleGroupMessage} />
             </main>
         )
     }

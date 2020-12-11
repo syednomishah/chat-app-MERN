@@ -38,6 +38,7 @@ exports = module.exports = function({io,socket}){
 
 
     socket.on('login',data=>{
+        if(data && data.username)
         db.User.findOne({
             where: {username: data.username}
           }).then(user=>{

@@ -90,7 +90,14 @@ function newGroupMessage(cb){
 		socket.emit('newGroupMessage',cb);
 	}
 }
+function brodcastMessage(cb){
+	if(typeof cb === "function"){
+		socket.off('brodcastMessage').on('brodcastMessage', cb);
+	} else {
+		socket.emit('brodcastMessage',cb);
+	}
+}
 
 export {
-    test, login, members, chatHistory, newMessage, newGroup, groups, groupChatHistory, newGroupMessage
+    test, login, members, chatHistory, newMessage, newGroup, groups, groupChatHistory, newGroupMessage, brodcastMessage
 };

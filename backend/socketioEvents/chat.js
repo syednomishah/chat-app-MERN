@@ -18,6 +18,7 @@ exports = module.exports = function({socket,Emit,EmitAll,EmitTo}){
     });
 
     socket.on('groups', data=> {
+        // console.log(socket,'imhere');
         db.GroupMember.findAll({
             where:{UserId: socket.member_id}
         }).then(groupMember=>{
@@ -53,6 +54,35 @@ exports = module.exports = function({socket,Emit,EmitAll,EmitTo}){
             })
         }else{
             Emit(socket,'newMessage',{success: false,msg: 'could not send your message!'})
+        }
+        
+    });
+    socket.on('brodcastMessage', data=> {
+        if(data.message){
+            
+            db.User.findAll().then(users=>{
+                users = toJson(users);
+                messages = [];
+                users.map(user=>{
+                    // if(user.id!=socket.member_id){
+                        messages.push({senderId: socket.member_id, receiverId: user.id,message: data.message});
+                    // }
+                })
+                db.Conversation.bulkCreate(messages).then(()=>{
+                    EmitTo(socket.member_id,'brodcastMessage',{success: true})
+                    messages.map(message=>{
+                        message['createdAt'] = new Date();
+                        message['username'] = socket.member_name;
+                        console.log('sending to ', message.receiverId)
+                        console.log(message);
+                        EmitTo(message.receiverId,'newMessage',message);
+                        // EmitTo(message.senderId,'newMessage',message);
+                    })
+                })
+            })
+            
+        }else{
+            Emit(socket,'brodcastMessage',{success: false,msg: 'could not send your message!'})
         }
         
     });
